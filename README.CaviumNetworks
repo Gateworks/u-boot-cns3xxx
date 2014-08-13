@@ -1,0 +1,14 @@
+
+Building the Software:
+======================
+
+1. Build U-Boot for CNS3000 board in little-endian (LE) mode
+
+[ ]# make cavium_cns3000_config
+[ ]# make
+
+2. Build U-Boot for CNS3000 board in big-endian (BE8) mode
+
+[ ]# BIG_ENDIAN=y make cavium_cns3000be8_config
+[ ]# BIG_ENDIAN=y make
+

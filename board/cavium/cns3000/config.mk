@@ -1,0 +1,6 @@
+#
+# 
+#
+
+#TEXT_BASE = 0x00000000
+TEXT_BASE = 0x01E00000

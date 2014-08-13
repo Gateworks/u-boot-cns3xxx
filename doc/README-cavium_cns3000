@@ -1,0 +1,6 @@
+
+U-Boot for Cavium Networks ARM11 MPCore Development Platforms
+
+[ ]# make cavium_cns3000_config
+[ ]# make
+
