@@ -39,3 +39,4 @@ else
 obj-$(CONFIG_GENERIC_MMC) += mmc_write.o
 endif
 obj-$(CONFIG_MVEBU_MMC) += mvebu_mmc.o
+obj-$(CONFIG_CNS3XXX_SDHCI) += cns3xxx_sdhci.o

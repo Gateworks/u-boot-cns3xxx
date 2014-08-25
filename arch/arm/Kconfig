@@ -403,6 +403,9 @@ config TARGET_MX6SLEVK
 config TARGET_MX6SXSABRESD
 	bool "Support mx6sxsabresd"
 
+config TARGET_GW_LAGUNA
+	bool "Support Gateworks Laguna"
+
 config TARGET_GW_VENTANA
 	bool "Support gw_ventana"
 
@@ -612,6 +615,7 @@ source "board/freescale/mx6slevk/Kconfig"
 source "board/freescale/mx6sxsabresd/Kconfig"
 source "board/freescale/vf610twr/Kconfig"
 source "board/gateworks/gw_ventana/Kconfig"
+source "board/gateworks/laguna/Kconfig"
 source "board/genesi/mx51_efikamx/Kconfig"
 source "board/gumstix/pepper/Kconfig"
 source "board/h2200/Kconfig"

@@ -34,6 +34,7 @@ obj-$(CONFIG_BFIN_SERIAL) += serial_bfin.o
 obj-$(CONFIG_FSL_LPUART) += serial_lpuart.o
 obj-$(CONFIG_MXS_AUART) += mxs_auart.o
 obj-$(CONFIG_ARC_SERIAL) += serial_arc.o
+obj-$(CONFIG_CNS3000_SERIAL) += serial_cns3000.o
 
 ifndef CONFIG_SPL_BUILD
 obj-$(CONFIG_USB_TTY) += usbtty.o
