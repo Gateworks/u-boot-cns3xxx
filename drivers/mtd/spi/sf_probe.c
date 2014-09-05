@@ -146,14 +146,15 @@ static struct spi_flash *spi_flash_validate_params(struct spi_slave *spi,
 
 	/* Compute the flash size */
 	flash->shift = (flash->dual_flash & SF_DUAL_PARALLEL_FLASH) ? 1 : 0;
+
 	/*
-	 * The Spansion S25FL032P and S25FL064P have 256b pages, yet use the
-	 * 0x4d00 Extended JEDEC code. The rest of the Spansion flashes with
-	 * the 0x4d00 Extended JEDEC code have 512b pages. All of the others
-	 * have 256b pages.
+	 * The Spansion S25FL032P/S25FL064P/S25FL128P have 256b pages,
+	 * yet use the 0x4d00 Extended JEDEC code. The rest of the Spansion
+	 * flashes with the 0x4d00 Extended JEDEC code have 512b pages.
+	 * All of the others have 256b pages.
 	 */
 	if (ext_jedec == 0x4d00) {
-		if ((jedec == 0x0215) || (jedec == 0x216))
+		if ((jedec == 0x0215) || (jedec == 0x216) || (jedec == 0x2018))
 			flash->page_size = 256;
 		else
 			flash->page_size = 512;
