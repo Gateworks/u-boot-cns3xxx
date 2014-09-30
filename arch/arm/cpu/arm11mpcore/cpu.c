@@ -33,6 +33,17 @@ int cpu_init (void)
 
 static void cache_flush(void);
 
+static void zero_vectors(void)
+{
+	volatile unsigned int *v = (volatile unsigned int *)0x20000000;
+	int i;
+
+	for (i = 0; i < 8; i++) {
+		*v = 0;
+		v++;
+	}
+}
+
 int cleanup_before_linux (void)
 {
   /*
@@ -48,6 +59,9 @@ int cleanup_before_linux (void)
   icache_disable();
   dcache_disable();
   l2_cache_disable();
+
+  /* Zero all vectors */
+  zero_vectors();
 
   /* flush I/D-cache */
   cache_flush();
