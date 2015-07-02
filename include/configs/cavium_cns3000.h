@@ -249,7 +249,7 @@ The kernel command line & boot command below are for a Cavium Networks CNS3000 b
 #define CFG_MONITOR_LEN			(256 << 10)
 
 #define CFG_MAX_FLASH_BANKS     1       /* max number of memory banks           */
-#define CFG_MAX_FLASH_SECT      256 /* max number of sectors on one chip    */
+#define CFG_MAX_FLASH_SECT      1024 /* max number of sectors on one chip    */
 
 #define CFG_FLASH_CFI       /* The flash is CFI compatible  */
 #define CONFIG_FLASH_CFI_DRIVER     /* Use common CFI driver  */
