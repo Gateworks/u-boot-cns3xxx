@@ -98,7 +98,8 @@ static void pcie_init(void)
 
 #ifdef GPIOA_PERST
 	gpio_perst = GPIOA_PERST;
-	if (strncmp(model, "GW2391", 6) == 0) {
+	if (strncmp(model, "GW2391", 6) == 0 ||
+	    strncmp(model, "GW2393", 6) == 0) {
 		gpio_perst = 8;
 	}
 #endif
