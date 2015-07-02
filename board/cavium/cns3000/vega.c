@@ -44,6 +44,8 @@ DECLARE_GLOBAL_DATA_PTR;
 static ulong timestamp;
 static ulong lastdec;
 uint8_t model[16];
+uint8_t rev;
+int sp;
 
 #define READ_TIMER1 (*(volatile ulong *)(CFG_TIMERBASE))
 #define READ_TIMER2 (*(volatile ulong *)(CFG_TIMERBASE + 0x10))
@@ -101,8 +103,29 @@ static void pcie_init(void)
 	}
 #endif
 
-	/* boards with external PCI clockgen have GPIOB26 high at powerup */
-	external_clkgen = (IO_READ(GPIOB_IN) & (1 << 26)) ? 1 : 0;
+	/**
+	 * All boards with external PCI clockgen have GPIOB26 high at powerup.
+	 * However, exceptions exist with the GW2386 after a certain revision
+	 * and special number, the GW2391, and GW2393.
+	 */
+	if (strncmp(model, "GW2386", 6) == 0) {
+		if ((sp == 217) && (rev >= 'E'))
+			external_clkgen = 1;
+		else if ((sp == 0) && (rev == 'D'))
+			external_clkgen = 1;
+		else
+			external_clkgen = 0;
+	}
+	else if (strncmp(model, "GW2391", 6) == 0) {
+		if (rev >= 'C')
+			external_clkgen = 1;
+		else
+			external_clkgen = 0;
+	}
+	else if (strncmp(model, "GW2393", 6) == 0)
+		external_clkgen = 1;
+	else
+		external_clkgen = (IO_READ(GPIOB_IN) & (1 << 26)) ? 1 : 0;
 
 	printf("PCI:   PERST:GPIOA%d clock:%s\n", gpio_perst,
 	       external_clkgen ? "external" : "internal");
@@ -302,7 +325,31 @@ int misc_init_r (void)
 *************************************************************/
 int checkboard(void)
 {
+	int i;
+
+	/* determine board model */
 	i2c_read(0x51, 0x30, 1, model, 16);
+
+	/* determine board revision */
+	rev = '\0';
+	for (i = sizeof(model) - 1; i >= 0; i--) {
+		if (model[i] >= 'A') {
+			rev = model[i];
+			break;
+		}
+	}
+
+	/* determine board sp number (assume 3 digit special number) */
+	sp = 0;
+	for (i = sizeof(model) - 4; i > 0; i--) {
+		if (model[i - 1] == 'S' && model[i] == 'P') {
+			/* Convert SPXXX to numeric */
+			sp = (sp * 10) + (model[i+1] - '0');
+			sp = (sp * 10) + (model[i+2] - '0');
+			sp = (sp * 10) + (model[i+3] - '0');
+			break;
+		}
+	}
 
 	pcie_init();
 	return (0);
