@@ -103,8 +103,29 @@ static int pcie_init(void)
 	else
 		gpio_perst = 11;
 
-	/* boards with external PCI clockgen have GPIOB26 high at powerup */
-	external_clkgen = (IO_READ(GPIOB_IN) & (1 << 26)) ? 1 : 0;
+	/**
+	 * All boards with external PCI clockgen have GPIOB26 high at powerup.
+	 * However, exceptions exist with the GW2386 after a certain revision
+	 * and special number, the GW2391, and GW2393.
+	 */
+	if (strncmp((char *)model, "GW2386", 6) == 0) {
+		if ((sp == 217) && (rev >= 'E'))
+			external_clkgen = 1;
+		else if ((sp == 0) && (rev == 'D'))
+			external_clkgen = 1;
+		else
+			external_clkgen = 0;
+	}
+	else if (strncmp((char *)model, "GW2391", 6) == 0) {
+		if (rev >= 'C')
+			external_clkgen = 1;
+		else
+			external_clkgen = 0;
+	}
+	else if (strncmp((char *)model, "GW2393", 6) == 0)
+		external_clkgen = 1;
+	else
+		external_clkgen = (IO_READ(GPIOB_IN) & (1 << 26)) ? 1 : 0;
 
 	printf("PCI:   PERST:GPIOA%d clock:%s\n", gpio_perst,
 	       external_clkgen ? "external" : "internal");
