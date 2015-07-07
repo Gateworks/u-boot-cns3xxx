@@ -57,16 +57,41 @@ static int pcie_init(void)
 {
 	unsigned char eeprom;
 	unsigned int temp;
-	uint8_t model[16];
 	unsigned char external_clkgen;
 	int gpio_perst = -1;
+	uint8_t model[16];
+	uint8_t rev;
+	int sp;
 
 	/* Errata C-01 */
 	IO_WRITE(PCIE0_PHY_ERRATA, 0xe2c);
 	IO_WRITE(PCIE1_PHY_ERRATA, 0xe2c);
 
+	/* determine board model */
+	i2c_read(0x51, 0x30, 1, model, sizeof(model));
+
+	/* determine board revision */
+	rev = '\0';
+	for (temp = sizeof(model) - 1; temp >= 0; temp--) {
+		if (model[temp] >= 'A') {
+			rev = model[temp];
+			break;
+		}
+	}
+
+	/* determine board sp number (assume 3 digit special number) */
+	sp = 0;
+	for (temp = sizeof(model) - 4; temp > 0; temp--) {
+		if (model[temp - 1] == 'S' && model[temp] == 'P') {
+			/* Convert SPXXX to numeric */
+			sp = (sp * 10) + (model[temp+1] - '0');
+			sp = (sp * 10) + (model[temp+2] - '0');
+			sp = (sp * 10) + (model[temp+3] - '0');
+			break;
+		}
+	}
+
 	/* determine gpio used for PCI PERST# which is board specific */
-	i2c_read(0x51, 0x30, 1, model, 16);
 	switch (model[5] - '0') {
 		case 0: /* GW2380 */
 		case 2: /* GW2382 */
