@@ -92,19 +92,16 @@ static int pcie_init(void)
 	}
 
 	/* determine gpio used for PCI PERST# which is board specific */
-	switch (model[5] - '0') {
-		case 0: /* GW2380 */
-		case 2: /* GW2382 */
-		case 3: /* GW2383 */
-			gpio_perst = 2;
-			break;
-		case 1: /* GW2391 */
-			gpio_perst = 8;
-			break;
-		default:
-			gpio_perst = 11;
-			break;
+	if (strncmp((char *)model, "GW2380", 6) == 0 ||
+	    strncmp((char *)model, "GW2382", 6) == 0 ||
+	    strncmp((char *)model, "GW2383", 6) == 0) {
+		gpio_perst = 2;
 	}
+	else if (strncmp((char *)model, "GW2391", 6) == 0 ||
+		   strncmp((char *)model, "GW2393", 6) == 0)
+		gpio_perst = 8;
+	else
+		gpio_perst = 11;
 
 	/* boards with external PCI clockgen have GPIOB26 high at powerup */
 	external_clkgen = (IO_READ(GPIOB_IN) & (1 << 26)) ? 1 : 0;
