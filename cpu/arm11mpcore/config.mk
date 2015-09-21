@@ -28,7 +28,9 @@ PLATFORM_RELFLAGS += -mbig-endian
 PLATFORM_CPPFLAGS += -mbig-endian
 endif
 
-PLATFORM_CPPFLAGS += -march=armv4
+#PLATFORM_CPPFLAGS += -march=armv4
+#PLATFORM_CPPFLAGS += -march=armv5t -msoft-float
+PLATFORM_CPPFLAGS += -march=armv5te -msoft-float
 PLATFORM_CPPFLAGS += -mno-thumb-interwork
 # =========================================================================
 #
