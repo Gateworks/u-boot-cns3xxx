@@ -350,7 +350,7 @@ void start_armboot (void)
 
 #ifdef CONFIG_HAS_DATAFLASH
 	AT91F_DataflashInit();
-	dataflash_print_info();
+	/* dataflash_print_info(); */
 #endif
 
 	/* initialize environment */
